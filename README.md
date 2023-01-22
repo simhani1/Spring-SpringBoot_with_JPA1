@@ -11,3 +11,4 @@
 
 #### 꿀팁!
 - `implementation 'org.springframework.boot:spring-boot-devtools'`를 의존성으로 추가하면 html 파일을 `build -> recompile`만 실행해주면 실시간으로 변화를 볼 수 있다.
+
