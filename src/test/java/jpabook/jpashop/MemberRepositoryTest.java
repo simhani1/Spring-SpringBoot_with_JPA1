@@ -1,4 +1,4 @@
-package com.jpabook.jpashop;
+package jpabook.jpashop;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -9,18 +9,17 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MemberRepositoryTest {
-
     @Autowired
     MemberRepository memberRepository;
 
     @Test
     @Transactional
-    // @Rollback(false) 스프링은 테스트가 동작하고 나서 롤백을 한다. 따라서 DB에서 삽입된 값을 삭제해서 우너상태로 유지할 수 있다.
+    @Rollback(false)
     public void testMember() throws Exception {
         // given
         Member member = new Member();
@@ -34,7 +33,6 @@ public class MemberRepositoryTest {
         Assertions.assertThat(findMember.getId()).isEqualTo(member.getId());
         Assertions.assertThat(findMember.getUsername()).isEqualTo(member.getUsername());
         Assertions.assertThat(findMember).isEqualTo(member);
-        System.out.println("findMember == member: " + (findMember == member));  // 같은 트랜잭션 안에서 같은 영속성 컨텍스트이므로 id값이 같으면 같은 엔티티로 인식한다.
+        System.out.println("(findMember == member) = " + (findMember == member));
     }
-
 }
