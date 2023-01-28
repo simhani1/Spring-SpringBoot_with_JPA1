@@ -20,6 +20,21 @@ public class ItemService {
         itemRepository.save(item);
     }
 
+    @Transactional
+    // 변경감지를 사용하는 방법
+    public void updateItem(Long itemId, UpdateItemDto updateItemDto) {
+
+        // DTO 객체를 사용하는 방법
+//        Item findItem = itemRepository.findOne(itemId);
+//        findItem.setPrice(updateItemDto.getPrice());
+//        findItem.setName(updateItemDto.getName());
+//        findItem.setStockQuantity(updateItemDto.getStockQuantity());
+
+        // 변경 함수를 사용하는 방법(추천)
+        Item findItem = itemRepository.findOne(itemId);
+        findItem.change(updateItemDto.getName(), updateItemDto.getPrice(), updateItemDto.getStockQuantity());
+    }
+
     public List<Item> findItems() {
         return itemRepository.findAll();
     }

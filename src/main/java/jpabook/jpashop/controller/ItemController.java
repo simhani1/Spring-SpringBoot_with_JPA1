@@ -3,6 +3,7 @@ package jpabook.jpashop.controller;
 import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.service.ItemService;
+import jpabook.jpashop.service.UpdateItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,17 +65,27 @@ public class ItemController {
     }
 
     @PostMapping("/items/{itemId}/edit")
-    public String updateItem(@ModelAttribute("form") BookForm bookForm, @PathVariable String itemId) {
+    public String updateItem(@PathVariable Long itemId, @ModelAttribute("form") BookForm bookForm) {
 
-        Book book = new Book();
-        book.setId(bookForm.getId());
-        book.setName(bookForm.getName());
-        book.setPrice(bookForm.getPrice());
-        book.setStockQuantity(bookForm.getStockQuantity());
-        book.setAuthor(bookForm.getAuthor());
-        book.setIsbn(bookForm.getIsbn());
+        // 어설프게 엔티티를 생성해서 값을 수정하는 방법
+//        Book book = new Book();
+//        book.setId(bookForm.getId());
+//        book.setName(bookForm.getName());
+//        book.setPrice(bookForm.getPrice());
+//        book.setStockQuantity(bookForm.getStockQuantity());
+//        book.setAuthor(bookForm.getAuthor());
+//        book.setIsbn(bookForm.getIsbn());
+//        itemService.saveItem(book);
 
-        itemService.saveItem(book);
+        // 변경 감지 방법을 사용하면서 준영속 엔티티를 생성하지 않는 방법
+        // 서비스계층에 DTO를 만들어서 활용해라
+        UpdateItemDto updateItemDto = UpdateItemDto.builder()
+                .name(bookForm.getName())
+                .price(bookForm.getPrice())
+                .stockQuantity(bookForm.getStockQuantity())
+                .build();
+        itemService.updateItem(itemId, updateItemDto);
         return "redirect:/items";
     }
+
 }
