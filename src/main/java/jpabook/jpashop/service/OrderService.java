@@ -8,6 +8,7 @@ import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.reposiotry.ItemRepository;
 import jpabook.jpashop.reposiotry.MemberRepository;
 import jpabook.jpashop.reposiotry.OrderRepository;
+import jpabook.jpashop.reposiotry.OrderSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,16 +50,18 @@ public class OrderService {
 
     // 주문 취소
     @Transactional
-    public void cancleOrder(Long orderId) {
+    public void cancelOrder(Long orderId) {
         // 주문 엔티티 조회
         Order order = orderRepository.findOne(orderId);
 
         // 주문 취소
-        order.cancle();
+        order.cancel();
     }
 
-    // 검색
-//    public List<Order> findOrders(OrderSearch orderSearch) {
-//        return orderRepository.findAll(orderSearch);
-//    }
+     // 검색
+    // 단순 위임을 하는 경우에는 그냥 컨트롤러에서 바로 레포지토리에 접근을 해도 상관은 없다
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        return orderRepository.findAllByCriteria(orderSearch);
+    }
+
 }
